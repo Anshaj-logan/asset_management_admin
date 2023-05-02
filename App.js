@@ -43,47 +43,47 @@ app.use('/api/register/',registerRouter)
 
 
 
-app.get('/viewasset', async function(req,res){
-  try {
-      const  data = await assetmodel.aggregate([
-          {
-            '$lookup': {
-              'from': 'category_tbs', 
-              'localField': 'category_id', 
-              'foreignField': '_id', 
-              'as': 'category'
-            }
-          },
-          {
-              '$unwind' : '$category'
-          },
-          {
-              '$group' :
-              {
-                  '_id': '$_id',
-                  'assetname':{'$first':'$assetname'} ,
-                  'purchasedate':{'$first':'$purchasedate'} ,
-                  'Receipt':{'$first':'$Receipt'} ,
-                  'totalquantity':{'$first':'$totalquantity'} ,
-                  'cost':{'$first':'$cost'} ,
-                  'image':{'$first':'$image'} ,
+// app.get('/viewasset', async function(req,res){
+//   try {
+//       const  data = await assetmodel.aggregate([
+//           {
+//             '$lookup': {
+//               'from': 'category_tbs', 
+//               'localField': 'category_id', 
+//               'foreignField': '_id', 
+//               'as': 'category'
+//             }
+//           },
+//           {
+//               '$unwind' : '$category'
+//           },
+//           {
+//               '$group' :
+//               {
+//                   '_id': '$_id',
+//                   'assetname':{'$first':'$assetname'} ,
+//                   'purchasedate':{'$first':'$purchasedate'} ,
+//                   'Receipt':{'$first':'$Receipt'} ,
+//                   'totalquantity':{'$first':'$totalquantity'} ,
+//                   'cost':{'$first':'$cost'} ,
+//                   'image':{'$first':'$image'} ,
 
-                  'categoryname':{'$first':'$category.categoryname'} ,
-              }
-          }
+//                   'categoryname':{'$first':'$category.categoryname'} ,
+//               }
+//           }
 
 
 
-        ])
+//         ])
 
-// res.json({data:data})
-      res.render('ViewAsset',{data})
+// // res.json({data:data})
+//       res.render('ViewAsset',{data})
       
-  } catch (error) {
-      console.log('categoryname');
-  }
+//   } catch (error) {
+//       console.log('categoryname');
+//   }
   
-})
+// })
 
 
 app.get('/viewotherallocation', async function(req,res){
