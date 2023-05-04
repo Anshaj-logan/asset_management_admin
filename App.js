@@ -1,4 +1,9 @@
 const express = require('express')
+var mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+const app = express()
+
+
 const Category = require('./src/routes/Category')
 const AssetRouter = require('./src/routes/AssetRouter')
 const Allocation = require('./src/routes/Allocation')
@@ -7,22 +12,31 @@ const ComplaintRouter = require('./src/routes/ComplaintRouter')
 const SuggestionRouter = require('./src/routes/SuggestionRouter')
 const ProfileRouter = require('./src/routes/ProfileRouter')
 const OtherAllocationRouter = require('./src/routes/OtherAllocationRouter')
-
-
-
-
-var bodyParser = require('body-parser')
 const categorymodel = require('./src/models/Categorytbl')
 const assetmodel = require('./src/models/Assettbl')
 const StaffRegisterRouter = require('./src/routes/StaffRegistrationRouter')
 const registerRouter = require('./src/routes/api/registerRouter')
+const signinRouter = require('./src/routes/api/signinRouter')
 
-const app = express()
+
+
 app.use(express.static('./public'))
 app.set('view engine','ejs')
 app.set('views','./src/views')
-app.use(bodyParser.urlencoded({ extended: false }))
-
+app.use(express.urlencoded({ extended: true }))
+app.use(bodyParser())
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    res.setHeader( 
+      "Access-Control-Allow-Methods",
+      "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+    );
+    next();
+  });
 
 
 app.use('/category',Category)
@@ -37,6 +51,7 @@ app.use('/staffreg',StaffRegisterRouter)
 
 
 app.use('/api/register/',registerRouter)
+app.use('/api/login/',signinRouter)
 
 
 
@@ -129,6 +144,16 @@ app.get('/',  (req, res) =>{
 })
 
 
-app.listen(2000,()=>{
-    console.log("server started at http://localhost:2000");
+const MONGODB_URL=
+"mongodb+srv://anshaj:1234@cluster0.szrb1ns.mongodb.net/asset_mgt-db?retryWrites=true&w=majority"
+
+
+const port=2000;
+
+mongoose.connect(MONGODB_URL).then(()=>{
+    app.listen(port,()=>{
+        console.log(`server running on port http://localhost:2000/admin`);
+    })
+}).catch((error)=>{
+    console.log(` ${error} did not connect`); 
 })
