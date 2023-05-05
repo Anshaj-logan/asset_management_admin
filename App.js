@@ -18,6 +18,7 @@ const StaffRegisterRouter = require('./src/routes/StaffRegistrationRouter')
 const registerRouter = require('./src/routes/api/registerRouter')
 const signinRouter = require('./src/routes/api/signinRouter')
 const complaintRouter = require('./src/routes/api/complaintRouter')
+const suggestionRouter = require('./src/routes/api/suggestionRouter')
 
 
 
@@ -54,6 +55,7 @@ app.use('/staffreg',StaffRegisterRouter)
 app.use('/api/register/',registerRouter)
 app.use('/api/login/',signinRouter)
 app.use('/api/complaint/',complaintRouter)
+app.use('/api/suggestion/',suggestionRouter)
 
 
 
