@@ -10,8 +10,41 @@ ProfileRouter.get('/viewstudentprofile',(req,res)=>{
     res.render('Viewstdprofile')
 })
 
-ProfileRouter.get('/viewstaffprofile',(req,res)=>{
-    res.render('Viewstaffprofile')
+ProfileRouter.get('/viewstaffprofile',async(req,res)=>{
+  try {
+    const staff = await  login.aggregate([
+      {
+          '$lookup': {
+            'from': 'registerstaff_tbs', 
+            'localField': '_id', 
+            'foreignField': 'login_id', 
+            'as': 'data'
+          }
+        },
+      {
+        "$unwind": "$data"
+      },
+      // {
+      //   "$group": {
+      //     "_id": "$_id",
+      //     "user_id": { "$first": "$data._id" },
+      //     "name": { "$first": "$data.name" },
+      //     "area": { "$first": "$data.area" },
+      //     "phone": { "$first": "$data.phone_no" },
+      //     "email": { "$first": "$data.email" },
+      //     "status": { "$first": "$status" },
+      //   }
+      // }
+
+    ])
+  if(staff){
+    res.json(staff)
+    // res.render('Viewstaffprofile')
+  }
+  } catch (error) {
+    
+  }
+   
 })
 
 ProfileRouter.get('/vieworkerprofile',async(req,res)=>{
