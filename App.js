@@ -145,7 +145,7 @@ app.get('/',  (req, res) =>{
 
 
 const MONGODB_URL=
-"mongodb+srv://anshaj:1234@cluster0.szrb1ns.mongodb.net/asset_mgt-db?retryWrites=true&w=majority"
+"mongodb+srv://maneeshmaitexa:maneeshmaitexa@cluster0.fv75o1k.mongodb.net/AssetDb?retryWrites=true&w=majority"
 
 
 const port=2000;
