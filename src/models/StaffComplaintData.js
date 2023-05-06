@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const schema = mongoose.Schema
 
 const staffcomplaintSchema = new schema({
-    staff_id:{type:mongoose.Types.ObjectId,ref:"registerstudent_tb"},
+    staff_id:{type:mongoose.Types.ObjectId,ref:"registerstaff_tb"},
     department:{type:String},
     class:{type:String},
     room_number:{type:String},

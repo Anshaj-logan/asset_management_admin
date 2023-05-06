@@ -4,11 +4,11 @@ const bcrypt = require('bcryptjs');
 const Complaint = require('../../models/ComplaintData');
 const ComplaintAccept = require('../../models/ComplaintAcceptData');
 const StaffComplaint = require('../../models/StaffComplaintData');
-const multer = require("multer");
+const StaffComplaintAccept = require('../../models/ComplaintAcceptStaffData');
 const mongoose = require('mongoose');
 
 var objectId = mongoose.Types.ObjectId
-
+const multer = require("multer");
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "../client/public/Complaint")
@@ -116,6 +116,48 @@ ComplaintRouter.get("/view-all-pending-complaints", async (req, res) => {
     }
 });
 
+
+ComplaintRouter.get("/view-all-pending-complaints-staff", async (req, res) => {
+    try {
+        const allData = await StaffComplaint.aggregate([
+            {
+              '$lookup': {
+                'from': 'registerstaff_tbs', 
+                'localField': 'staff_id', 
+                'foreignField': '_id', 
+                'as': 'staff'
+              }
+            },
+            {
+                "$unwind":"$staff"
+            },
+            {
+                "$group":{
+                    "_id":"$_id",
+                    "department":{"$first":"$department"},
+                    "class":{"$first":"$class"},
+                    "complaint":{"$first":"$complaint"},
+                    "room_number":{"$first":"$room_number"},
+                    "complaint_id":{"$first":"$_id"},
+                    "name":{"$first":"$staff.name"},
+                    "image":{"$first":"$image"},
+                    "status":{"$first":"$status"},
+                }
+            }
+            
+          ])
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+    }
+});
+
 ComplaintRouter.get("/view-all-pending-complaints-staff", async (req, res) => {
     try {
         const allData = await StaffComplaint.find({status:"0"});
@@ -153,6 +195,27 @@ ComplaintRouter.get("/accept-student-complaints/:id/:worker", async (req, res) =
 }
 );
 
+ComplaintRouter.get("/accept-staff-complaints/:id/:worker", async (req, res) => {
+    try {
+        const complaint_id = req.params.id
+        const worker_id = req.params.worker
+
+        const updation = await StaffComplaint.updateOne({_id:complaint_id},{$set:{status:"1"}})
+        const data = await StaffComplaintAccept.create({complaint_id,worker_id,status:"0"})
+        if (data) {
+            return res.status(200).json({ success: true, error: false, message:"Accepted" });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
 ComplaintRouter.get("/view-all-worker-accepted-complaints/:workerId", async (req, res) => {
     try {
         const worker_id = req.params.workerId
@@ -172,12 +235,14 @@ ComplaintRouter.get("/view-all-worker-accepted-complaints/:workerId", async (req
                 'as': 'worker'
               }
             },
+        
             {
                 "$unwind":"$complaint"
             },
             {
                 "$unwind":"$worker"
             },
+          
             {
                 "$match":{
                     "worker_id":new objectId(worker_id)
@@ -186,12 +251,72 @@ ComplaintRouter.get("/view-all-worker-accepted-complaints/:workerId", async (req
             {
                 "$group":{
                     "_id":"$_id",
+                    // "name":{"$first":"$student.name"},
                     "department":{"$first":"$complaint.department"},
                     "class":{"$first":"$complaint.class"},
                     "complaint":{"$first":"$complaint.complaint"},
                     "room_number":{"$first":"$complaint.room_number"},
+                    "image":{"$first":"$complaint.image"},
                     "complaint_id":{"$first":"$complaint._id"},
-                    "status":{"$first":"$complaint.status"},
+                    "status":{"$first":"$status"},
+                }
+            }
+          ])
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+    }
+});
+
+ComplaintRouter.get("/view-all-worker-accepted-complaints-staff/:workerId", async (req, res) => {
+    try {
+        const worker_id = req.params.workerId
+        const allData = await StaffComplaintAccept.aggregate([
+            {
+              '$lookup': {
+                'from': 'staff_complaint_tbs', 
+                'localField': 'complaint_id', 
+                'foreignField': '_id', 
+                'as': 'complaint'
+              }
+            }, {
+              '$lookup': {
+                'from': 'registerworker_tbs', 
+                'localField': 'worker_id', 
+                'foreignField': '_id', 
+                'as': 'worker'
+              }
+            },
+        
+            {
+                "$unwind":"$complaint"
+            },
+            {
+                "$unwind":"$worker"
+            },
+          
+            {
+                "$match":{
+                    "worker_id":new objectId(worker_id)
+                }
+            },
+            {
+                "$group":{
+                    "_id":"$_id",
+                    // "name":{"$first":"$student.name"},
+                    "department":{"$first":"$complaint.department"},
+                    "class":{"$first":"$complaint.class"},
+                    "complaint":{"$first":"$complaint.complaint"},
+                    "room_number":{"$first":"$complaint.room_number"},
+                    "image":{"$first":"$complaint.image"},
+                    "complaint_id":{"$first":"$complaint._id"},
+                    "status":{"$first":"$status"},
                 }
             }
           ])
@@ -208,13 +333,37 @@ ComplaintRouter.get("/view-all-worker-accepted-complaints/:workerId", async (req
 });
 
 
-ComplaintRouter.get("/complete-complaints/:id/:complaint-id", async (req, res) => {
+ComplaintRouter.get("/complete-complaints/:id/:complaintid", async (req, res) => {
     try {
         const complaint_id = req.params.id
-        const Acomplaint_id = req.params.complaint-id
-
+        const Acomplaint_id = req.params.complaintid
+        console.log(complaint_id,Acomplaint_id);
         const updation = await Complaint.updateOne({_id:complaint_id},{$set:{status:"2"}})
-        const data = await ComplaintAccept.updateOne({complaint_id:Acomplaint_id},{$set:{status:"1"}})
+        const data = await ComplaintAccept.updateOne({_id:Acomplaint_id},{$set:{status:"1"}})
+        console.log(data,updation);
+        if (data.matchedCount===1) {
+            return res.status(200).json({ success: true, error: false, message:"Status updated" });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+}
+);
+
+
+ComplaintRouter.get("/complete-complaints-staff/:id/:complaintid", async (req, res) => {
+    try {
+        const complaint_id = req.params.id
+        const Acomplaint_id = req.params.complaintid
+        console.log(complaint_id,Acomplaint_id);
+        const updation = await StaffComplaint.updateOne({_id:complaint_id},{$set:{status:"2"}})
+        const data = await StaffComplaintAccept.updateOne({_id:Acomplaint_id},{$set:{status:"1"}})
+        console.log(data,updation);
         if (data.matchedCount===1) {
             return res.status(200).json({ success: true, error: false, message:"Status updated" });
         }

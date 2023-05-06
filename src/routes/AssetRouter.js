@@ -3,7 +3,18 @@ const assetmodel = require('../models/Assettbl')
 const categorymodel = require('../models/Categorytbl')
 const AssetRouter=express.Router()
 AssetRouter.use(express.static('./public'))
+const multer = require("multer");
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "../client/public/Asset")
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
 
+
+var upload = multer({ storage: storage })
 
 
 AssetRouter.get('/addasset', async function(req,res){
@@ -73,7 +84,10 @@ AssetRouter.get('/viewasset', async function(req,res){
 })
 
 
-AssetRouter.post('/save-asset',function (req,res){
+AssetRouter.post('/save-asset',upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'receipt', maxCount: 1 }
+  ]), function (req,res){
     const data={
         category_id:req.body.category_id,
         categoryname:req.body.category_name,
@@ -81,8 +95,8 @@ AssetRouter.post('/save-asset',function (req,res){
         totalquantity:req.body.totalquantity,
         cost:req.body.price,
         purchasedate:req.body.purchasedate,
-        Receipt:req.body.receiptname,
-        image:req.body.filename
+        Receipt:req.files['receipt'][0].filename,
+        image:req.files['image'][0].filename
 
     }
     assetmodel(data).save().then((data)=>{
