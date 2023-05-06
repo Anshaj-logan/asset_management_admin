@@ -15,7 +15,7 @@ const suggestionSchema = new schema({
 
 })
 
-const suggestionSchemamodel = mongoose.model('suggestionSchema_tb',suggestionSchema)
+const suggestionSchemamodel = mongoose.model('suggestion_tb',suggestionSchema)
 
 
 module.exports = suggestionSchemamodel

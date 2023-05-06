@@ -24,7 +24,7 @@ ComplaintRouter.post('/upload-image', upload.single("file"), (req, res) => {
 ComplaintRouter.post("/add-complaint", async (req, res) => {
     try {
         var details = { student_id: req.body.student_id, department: req.body.department, class: req.body.class, 
-            room_number: req.body.room_number, complaint: req.body.complaint, image: req.body.image}
+            room_number: req.body.room_number, complaint: req.body.complaint, image: req.body.image, status:"0"}
         const result = await Complaint(details).save()
         if (result) {
             res.status(201).json({ success: true, error: false, message: "Complaint added", details: result });
@@ -36,9 +36,10 @@ ComplaintRouter.post("/add-complaint", async (req, res) => {
 }
 );
 
-ComplaintRouter.get("/view-all-complaints", async (req, res) => {
+ComplaintRouter.get("/student-added-complaints/:id", async (req, res) => {
     try {
-        const allData = await Complaint.find();
+        const student_id = req.params.id
+        const allData = await Complaint.find({student_id:student_id});
         if (allData) {
             return res.status(200).json({ success: true, error: false, data: allData });
         }
@@ -55,10 +56,27 @@ ComplaintRouter.get("/view-all-complaints", async (req, res) => {
 
 
 
-ComplaintRouter.get("/student-added-complaints/:id", async (req, res) => {
+ComplaintRouter.get("/view-all-pending-complaints", async (req, res) => {
     try {
-        const id = req.params.id
-        const allData = await Complaint.find({student_id:student_id});
+        const allData = await Complaint.find({status:"0"});
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+        console.log(error);
+    }
+});
+
+
+ComplaintRouter.get("/accept-complaints/:id", async (req, res) => {
+    try {
+        const complaint_id = req.params.id
+        const updation = await Complaint.updateOne({_id:complaint_id},{$set:{status:"1"}})
         if (allData) {
             return res.status(200).json({ success: true, error: false, data: allData });
         }

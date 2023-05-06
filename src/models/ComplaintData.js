@@ -10,7 +10,8 @@ const complaintSchema = new schema({
     class:{type:String},
     room_number:{type:String},
     complaint:{type:String},
-    image:{type:String}
+    image:{type:String},
+    status:{type:String},
 
 
 })
