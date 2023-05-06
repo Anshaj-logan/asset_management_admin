@@ -132,7 +132,7 @@ ComplaintRouter.get("/view-all-pending-complaints-staff", async (req, res) => {
 });
 
 
-ComplaintRouter.get("/accept-complaints/:id/:worker", async (req, res) => {
+ComplaintRouter.get("/accept-student-complaints/:id/:worker", async (req, res) => {
     try {
         const complaint_id = req.params.id
         const worker_id = req.params.worker
