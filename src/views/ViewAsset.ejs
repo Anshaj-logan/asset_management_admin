@@ -225,8 +225,8 @@
                   <th>Total Quantity</th>
                   <th>Purchased Date</th>
                   <th>Price</th>
-                  <th>Asset Image</th>
-                  <th>Asset Receipt</th>
+                  <!-- <th>Asset Image</th>
+                  <th>Asset Receipt</th> -->
                   <th>Action</th>     
                 </tr>
               </thead>
@@ -240,10 +240,10 @@
                   <td><%= data[i].purchasedate%></td>
                   <td><%= data[i].cost%></td>
                   
-                  <td><%= data[i].image%></td>
-                  <td><%= data[i].Receipt%></td>
+                  <!-- <td><%= data[i].image%></td>
+                  <td><%= data[i].Receipt%></td> -->
 
-                  <td></td>
+                 
                   <td>
                     <a href="/asset/<%= data[i]._id%>" class="btn btn-primary" type="button">Edit</a>
                     <button class="btn btn-danger" type="button">Delete</button>

@@ -222,23 +222,21 @@
               <thead>
                 <tr>
                   <th>Sl.No</th>
-                  <th>Deartment</th>
+                  <th>Department</th>
                   <th>Class</th>
                   <th>Room  Number</th>
-                  <th>Student Name</th>
                   <th>Complaint</th>
              
                   
                 </tr>
               </thead>
               <tbody>
+                <%for(i=0;i<allData.length;i++){%>
                 <tr>
-                  <td>1</td>
-                  <td>CA</td>
-                  <td>1st</td>
-                  <td>214</td>
-                  
-                  <td>Divya</td>
+                  <td><%=i+1%></td>
+                  <td><%=allData[i].department%></td>
+                  <td><%=allData[i].class%></td>
+                  <td><%=allData[i].room_number%></td>
                  
                   <td> 
                     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">View</button>
@@ -253,11 +251,11 @@
                             <h4 class="modal-title"></h4>
                           </div>
                           <div class="modal-body">
-                            <p>Fan not working.</p>
+                            <p><%=allData[i].complaint%></p>
                           </div>
-                          <div class="modal-footer">
+                          <!-- <div class="modal-footer">
                             <button class="btn btn-info" type="button">Reply</button>      
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>
@@ -265,7 +263,7 @@
                     <button class="btn btn-info" type="button">Reply</button>                  
                   </td> -->
                 </tr>
-                
+                <%}%>
               </tbody>
             </table>
           </div>

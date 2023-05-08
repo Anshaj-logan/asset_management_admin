@@ -226,7 +226,7 @@
                   <th>Room Number</th>
                   <!-- <th>Asset Name</th>-->
                   <th>Allotted Quantity</th>
-                  <th>Allocation Image</th>
+        
                   <th>Action</th>
 
 
@@ -245,12 +245,12 @@
                   <td><%= data[i].Roomnumber%></td>
 
                   <td><%= data[i].allottedquantity%></td>
-                  <td><%= data[i].image%></td>
+    
                   
                  
                   <td>
                     <a href="/allocation/<%=data[i]._id%>" class="btn btn-primary" type="button">Edit</a>
-                    <button class="btn btn-danger" type="button">Delete</button>
+                    <a class="btn btn-danger" href="/allocation/delete/<%=data[i]._id%>" type="button">Delete</a>
                   </td>
 
                 </tr>

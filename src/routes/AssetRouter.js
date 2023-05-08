@@ -42,7 +42,7 @@ AssetRouter.get('/:id',async function(req,res){
 
 AssetRouter.get('/viewasset', async function(req,res){
     try {
-        console.log('$unwind');
+       
         const  data = await assetmodel.aggregate([
             {
               '$lookup': {
@@ -74,8 +74,8 @@ AssetRouter.get('/viewasset', async function(req,res){
 
           ])
 
- res.json({data:data})
-  //      res.render('ViewAsset',{data})
+//  res.json({data:data})
+       res.render('ViewAsset',{data})
         
     } catch (error) {
         console.log('categoryname');

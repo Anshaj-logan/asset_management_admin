@@ -14,6 +14,8 @@ const ProfileRouter = require('./src/routes/ProfileRouter')
 const OtherAllocationRouter = require('./src/routes/OtherAllocationRouter')
 const categorymodel = require('./src/models/Categorytbl')
 const assetmodel = require('./src/models/Assettbl')
+const allocationclsmodel = require('./src/models/Allocationtblcls')
+const allocationmodelother = require('./src/models/Allocationtblothers')
 const StaffRegisterRouter = require('./src/routes/StaffRegistrationRouter')
 const registerRouter = require('./src/routes/api/registerRouter')
 const signinRouter = require('./src/routes/api/signinRouter')
@@ -64,7 +66,7 @@ app.use('/api/suggestion/',suggestionRouter)
 
 app.get('/viewasset', async function(req,res){
   try {
-      const  data = await assetmodel.aggregate([
+      const  data1 = await assetmodel.aggregate([
           {
             '$lookup': {
               'from': 'category_tbs', 
@@ -94,6 +96,20 @@ app.get('/viewasset', async function(req,res){
 
 
         ])
+
+        const data = data1.map(item => {
+          return {
+            image:`${__dirname}/../client/public/Asset/${item.image}`,
+            Receipt:`${__dirname}/../client/public/Asset/${item.Receipt}`,
+            _id:item._id,
+            assetname:item.assetname,
+            purchasedate:item.purchasedate,
+            totalquantity:item.totalquantity,
+            cost:item.cost,
+            categoryname:item.categoryname,
+
+          }
+        });
 
 // res.json({data:data})
       res.render('ViewAsset',{data})
@@ -139,6 +155,69 @@ app.get('/viewotherallocation', async function(req,res){
   } catch (error) {
     console.log('assetname');
 
+  }
+})
+
+
+app.get('/viewallocation', async function(req,res){
+  try {
+      const data = await allocationclsmodel.aggregate([
+          {
+            '$lookup': {
+              'from': 'asset_tbs', 
+              'localField': 'asset_id', 
+              'foreignField': '_id', 
+              'as': 'Asset'
+            }
+          }, {
+              '$unwind' : '$Asset'
+          },
+          {
+              '$group' :
+          {
+              '_id': '$_id',
+              'department':{'$first':'$department'} ,
+              'Class':{'$first':'$Class'} ,
+              'Roomnumber':{'$first':'$Roomnumber'} ,
+              'image':{'$first':'$image' },
+              'allottedquantity':{'$first':'$allottedquantity'} ,
+              'assetname':{'$first':'$Asset.assetname' },
+          }
+      }
+        ])   
+      res.render('ViewAllocation',{data})
+  } catch (error) {
+      
+  }
+})
+
+Allocation.get('/viewallocationother', async function(req,res){
+  try {
+      const data = await allocationmodelother.aggregate([
+          {
+            '$lookup': {
+              'from': 'asset_tbs', 
+              'localField': 'asset_id', 
+              'foreignField': '_id', 
+              'as': 'Asset'
+            }
+          }, {
+              '$unwind' : '$Asset'
+          },
+          {
+              '$group' :
+          {
+              '_id': '$_id',
+              'other':{'$first':'$other'} ,
+              'Roomnumber':{'$first':'$Roomnumber'} ,
+              'allottedquantity':{'$first':'$allottedquantity'} ,
+              'assetname':{'$first':'$Asset.assetname' },
+          }
+      }
+        ])   
+      res.render('ViewOtherAllocation',{data})
+  } catch (error) {
+      
   }
 })
 

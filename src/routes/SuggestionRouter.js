@@ -1,16 +1,20 @@
 const express = require('express')
+const suggestionmodel = require('../models/SuggestionData')
 const SuggestionRouter = express.Router()
+
 SuggestionRouter.use(express.static('./public'))
 
 
-SuggestionRouter.get('/viewstaffsuggestion',(req,res)=>{
-    res.render('viewstaffsuggestion')
+SuggestionRouter.get('/viewsttudentsuggestion',async(req,res)=>{
+    try {
+        const allData = await suggestionmodel.find();
+        res.render('viewstdsuggestion',{allData})
+    } catch (error) {
+        
+    }
+
 })
 
-
-SuggestionRouter.get('/viewsttudentsuggestion',(req,res)=>{
-    res.render('viewstdsuggestion')
-})
 
 
 

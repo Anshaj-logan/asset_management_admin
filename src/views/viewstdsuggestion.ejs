@@ -222,21 +222,23 @@
                 <tr>
                   <th>Sl.No</th>
                   <th>Deartment</th>
-                  <th>Year</th>
+                  <th>Class</th>
                   <th>Room Number</th>
-                  <th>Student Name</th>
+                 
                   <th>Suggestion</th>
                   
                   
                 </tr>
               </thead>
               <tbody>
+
+                <%for(i=0;i<allData.length;i++){%>
                 <tr>
-                  <td>1</td>
-                  <td>Finance</td>
-                  <td>2nd</td>
-                  <td>222</td>
-                  <td>Keerthana</td>
+                  <td><%=i+1%></td>
+                  <td><%=allData[i].department%></td>
+                  <td><%=allData[i].class%></td>
+                  <td><%=allData[i].room_number%></td>
+                  
                   <td> 
                     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">View</button>
                     <!-- Modal -->
@@ -250,7 +252,7 @@
                             <h4 class="modal-title"></h4>
                           </div>
                           <div class="modal-body">
-                            <p>Need a whiteboard cleaner.</p>
+                            <p><%=allData[i].suggestion%></p>
                           </div>
                           <div class="modal-footer">
                             <button class="btn btn-info" type="button">Reply</button>        </div>
@@ -262,7 +264,7 @@
                   </td> -->
                 </tr>
                 
-                
+                <%}%>
               </tbody>
             </table>
           </div>
