@@ -1,18 +1,53 @@
 const express = require('express')
 const workerregistermodel = require('../models/Registerworker')
 const login = require('../models/Login')
+const staff = require('../models/Register')
+const student = require('../models/Registerstdnt')
 const ProfileRouter = express.Router()
 
 ProfileRouter.use(express.static('./public'))
 
 
-ProfileRouter.get('/viewstudentprofile',(req,res)=>{
-    res.render('Viewstdprofile')
+ProfileRouter.get('/viewstudentprofile',async(req,res)=>{
+  
+    try {
+      const data = await  login.aggregate([
+        {
+            '$lookup': {
+              'from': 'registerstudent_tbs', 
+              'localField': '_id', 
+              'foreignField': 'login_id', 
+              'as': 'data'
+            }
+          },
+        {
+          "$unwind": "$data"
+        },
+        {
+          "$group": {
+            "_id": "$_id",
+            "user_id": { "$first": "$data._id" },
+            "name": { "$first": "$data.name" },
+            "email": { "$first": "$data.email" },
+            "phone": { "$first": "$data.phone_no" },
+            "email": { "$first": "$data.email" },
+            "status": { "$first": "$status" },
+          }
+        }
+  
+      ])
+    if(data){
+      // res.json(data)
+      res.render('Viewstdprofile',{data})
+    }
+    } catch (error) {
+      
+    }
 })
 
 ProfileRouter.get('/viewstaffprofile',async(req,res)=>{
   try {
-    const staff = await  login.aggregate([
+    const data = await  login.aggregate([
       {
           '$lookup': {
             'from': 'registerstaff_tbs', 
@@ -24,22 +59,22 @@ ProfileRouter.get('/viewstaffprofile',async(req,res)=>{
       {
         "$unwind": "$data"
       },
-      // {
-      //   "$group": {
-      //     "_id": "$_id",
-      //     "user_id": { "$first": "$data._id" },
-      //     "name": { "$first": "$data.name" },
-      //     "area": { "$first": "$data.area" },
-      //     "phone": { "$first": "$data.phone_no" },
-      //     "email": { "$first": "$data.email" },
-      //     "status": { "$first": "$status" },
-      //   }
-      // }
+      {
+        "$group": {
+          "_id": "$_id",
+          "user_id": { "$first": "$data._id" },
+          "name": { "$first": "$data.name" },
+          "department": { "$first": "$data.department" },
+          "phone": { "$first": "$data.phone_no" },
+          "email": { "$first": "$data.email" },
+          "status": { "$first": "$status" },
+        }
+      }
 
     ])
-  if(staff){
-    res.json(staff)
-    // res.render('Viewstaffprofile')
+  if(data){
+    // res.json(staff)
+    res.render('Viewstaffprofile',{data})
   }
   } catch (error) {
     
@@ -97,6 +132,67 @@ ProfileRouter.get("/approve-worker/:id", async (req, res) => {
         res.redirect('/profile/vieworkerprofile')
         // res.status(500).json({ message: 'approved' })
     })
+
+});
+
+ProfileRouter.get("/approve-staff/:id", async (req, res) => {
+  const id = req.params.id
+  console.log(id);
+  login.updateOne({ _id: id }, { $set: { status: "1" } }).then((details) => {
+      
+      res.redirect('/profile/viewstaffprofile')
+      // res.status(500).json({ message: 'approved' })
+  })
+
+});
+
+
+ProfileRouter.get("/approve-student/:id", async (req, res) => {
+  const id = req.params.id
+  console.log(id);
+  login.updateOne({ _id: id }, { $set: { status: "1" } }).then((details) => {
+      
+      res.redirect('/profile/viewstudentprofile')
+      // res.status(500).json({ message: 'approved' })
+  })
+
+});
+
+
+ProfileRouter.get("/delete-worker/:id", async (req, res) => {
+  const id = req.params.id
+  console.log(id);
+  login.deleteOne({ _id: id }).then((details) => {
+    workerregistermodel.deleteOne({ login_id: id }).then((details) => {
+      res.redirect('/profile/vieworkerprofile')
+      // res.status(500).json({ message: 'approved' })
+    })
+      
+  })
+
+});
+
+
+ProfileRouter.get("/delete-staff/:id", async (req, res) => {
+  const id = req.params.id
+  console.log(id);
+  login.deleteOne({ _id: id }).then((details) => {
+    staff.deleteOne({ login_id: id }).then((details) => {
+      res.redirect('/profile/Viewstaffprofile')
+    })
+  })
+
+});
+
+
+ProfileRouter.get("/delete-student/:id", async (req, res) => {
+  const id = req.params.id
+  console.log(id);
+  login.deleteOne({ _id: id }).then((details) => {
+    student.deleteOne({ login_id: id }).then((details) => {
+      res.redirect('/profile/viewstudentprofile')
+    })
+  })
 
 });
 

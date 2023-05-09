@@ -87,7 +87,7 @@
     <!-- Sidebar menu-->
     <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
     <aside class="app-sidebar">
-      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar">
+      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" >
         <!-- <div>
           <p class="app-sidebar__user-name">John Doe</p>
           <p class="app-sidebar__user-designation">Frontend Developer</p>
@@ -95,18 +95,22 @@
       </div>
       <ul class="app-menu">
         <li><a class="app-menu__item active" href="/"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
-        <!-- <li><a class="app-menu__item active" href="Addcategory.html"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Add Category</span></a></li> -->
+        <!-- <li><a class="app-menu__item active" href="#"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Category</span></a>
+          <li><a class="treeview-item" href="Addcategory.html"><i class="icon fa fa-circle-o"></i> Add Category</a></li>
+          <li><a class="treeview-item" href="ViewCategory.html"><i class="icon fa fa-circle-o"></i> View Category</a></li>
+        </li> -->
+        
+
         <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">profile</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-            <ul class="treeview-menu">
-                <li><a class="treeview-item" href="/profile/viewstudentprofile"><i class="icon fa fa-circle-o"></i>Student Profile</a></li>
-                <li><a class="treeview-item" href="/profile/viewstaffprofile"><i class="icon fa fa-circle-o"></i>Staff Profile</a></li>
-                <li><a class="treeview-item" href="/profile/vieworkerprofile"><i class="icon fa fa-circle-o"></i>Worker Profile</a></li>
-    
-                 <!-- <li><a class="treeview-item" href="/category/viewcategory"><i class="icon fa fa-circle-o"></i> View Category</a></li> -->
-            </ul>
-          </li>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item" href="/profile/viewstudentprofile"><i class="icon fa fa-circle-o"></i>Student Profile</a></li>
+            <li><a class="treeview-item" href="/profile/viewstaffprofile"><i class="icon fa fa-circle-o"></i>Staff Profile</a></li>
+            <li><a class="treeview-item" href="/profile/vieworkerprofile"><i class="icon fa fa-circle-o"></i>Worker Profile</a></li>
 
 
+           <!-- <li><a class="treeview-item" href="/category/viewcategory"><i class="icon fa fa-circle-o"></i> View Category</a></li> -->
+          </ul>
+        </li>
 
         <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Category</span><i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
@@ -115,11 +119,11 @@
           </ul>
         </li>
 
-        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Asset</span>
+        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-cogs"></i><span class="app-menu__label">Asset</span>
           <i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
             <li><a class="treeview-item" href="/asset/addasset"><i class="icon fa fa-circle-o"></i> Add Asset</a></li>
-            <li><a class="treeview-item" href="/asset/viewasset"><i class="icon fa fa-circle-o"></i> View Asset</a></li>
+            <li><a class="treeview-item" href="/viewasset"><i class="icon fa fa-circle-o"></i> View Asset</a></li>
           </ul>
         </li>
 
@@ -129,8 +133,8 @@
           <ul class="treeview-menu">
             <li><a class="treeview-item" href="/allocation/addallocationclass"><i class="icon fa fa-circle-o"></i> Add Allocation Class</a></li>
             <li><a class="treeview-item" href="/allocation/addallocationother"><i class="icon fa fa-circle-o"></i> Add Allocation Others</a></li>
-            <li><a class="treeview-item" href="/allocation/viewallocation"><i class="icon fa fa-circle-o"></i> View Allocation</a></li>
-            <li><a class="treeview-item" href="/allocation/viewotherallocation"><i class="icon fa fa-circle-o"></i> View Other Allocation</a></li>
+            <li><a class="treeview-item" href="/viewallocation"><i class="icon fa fa-circle-o"></i> View Allocation</a></li>
+            <li><a class="treeview-item" href="/viewotherallocation"><i class="icon fa fa-circle-o"></i> View Other Allocation</a></li>
 
           </ul>
         </li>
@@ -154,10 +158,16 @@
 
         <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-comments"></i><span class="app-menu__label">Suggestion</span><i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
-            <li><a class="treeview-item" href="/suggestion/viewstaffsuggestion"><i class="icon fa fa-circle-o"></i>Staff Suggestion</a></li>
+            <!-- <li><a class="treeview-item" href="/suggestion/view"><i class="icon fa fa-circle-o"></i>Staff Suggestion</a></li> -->
             <li><a class="treeview-item" href="/suggestion/viewsttudentsuggestion"><i class="icon fa fa-circle-o"></i> Student Suggestion</a></li>
           </ul>
         </li>
+
+
+        <!-- <li><a class="app-menu__item active" href="AssetManage.html"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Add Asset</span></a></li> -->
+        <!-- <li><a class="app-menu__item active" href="AddAllocation.html"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<span class="app-menu__label">Add Allocation</span></a></li> -->
+        <!-- <li><a class="app-menu__item active" href="AddImage.html"><i class="fa fa-picture-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<span class="app-menu__label">Add Image</span></a></li> -->
+
 
         <!-- <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">UI Elements</span><i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
@@ -166,17 +176,17 @@
             <li><a class="treeview-item" href="ui-cards.html"><i class="icon fa fa-circle-o"></i> Cards</a></li>
             <li><a class="treeview-item" href="widgets.html"><i class="icon fa fa-circle-o"></i> Widgets</a></li>
           </ul>
-        </li>
-        <li><a class="app-menu__item" href="charts.html"><i class="app-menu__icon fa fa-pie-chart"></i><span class="app-menu__label">Charts</span></a></li>
-        <li class="treeview is-expanded"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-edit"></i><span class="app-menu__label">Forms</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+        </li> -->
+        <!-- <li><a class="app-menu__item" href="charts.html"><i class="app-menu__icon fa fa-pie-chart"></i><span class="app-menu__label">Charts</span></a></li>
+        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-edit"></i><span class="app-menu__label">Forms</span><i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
             <li><a class="treeview-item" href="form-components.html"><i class="icon fa fa-circle-o"></i> Form Components</a></li>
             <li><a class="treeview-item" href="form-custom.html"><i class="icon fa fa-circle-o"></i> Custom Components</a></li>
-            <li><a class="treeview-item active" href="form-samples.html"><i class="icon fa fa-circle-o"></i> Form Samples</a></li>
+            <li><a class="treeview-item" href="form-samples.html"><i class="icon fa fa-circle-o"></i> Form Samples</a></li>
             <li><a class="treeview-item" href="form-notifications.html"><i class="icon fa fa-circle-o"></i> Form Notifications</a></li>
           </ul>
-        </li>
-        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Tables</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+        </li> -->
+        <!-- <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Tables</span><i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
             <li><a class="treeview-item" href="table-basic.html"><i class="icon fa fa-circle-o"></i> Basic Tables</a></li>
             <li><a class="treeview-item" href="table-data-table.html"><i class="icon fa fa-circle-o"></i> Data Tables</a></li>
@@ -220,49 +230,34 @@
               <thead>
                 <tr>
                   <th>Sl.No</th>
-                  <th>User Type</th>
                   <th>Name</th>
-                  <th>Reg No</th>
-                  <th> Department</th>
-                  <th>Position</th>
+                  <th>Email</th>
                   <th>Phone</th>
                   <th>Action</th>                  
                   
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td> 
-                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal">Approve</button>
-                    <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#myModal">Reject</button>
-
-                    <!-- Modal -->
-                    <div id="myModal" class="modal fade" role="dialog">
-                      <div class="modal-dialog">
+                <% for(i=0;i<data.length;i++){%>
+                  <tr>
+                    <td><%=i+1%></td>
+                    <td><%=data[i].name%></td>
+                    <td><%=data[i].email%></td>
+                    <td><%=data[i].phone%></td>
+                    <td> 
+                      <% if(data[i].status === "1"){%>
+                        <a class="btn btn-outline-danger" style="width: 85px;" href="/profile/delete-student/<%=data[i]._id%>" type="button">Delete</a>
+                    <%}else{%>
+                      <a class="btn btn-outline-primary" href="/profile/approve-student/<%=data[i]._id%>" type="button">Approve</a> 
+                      <a class="btn btn-outline-danger" href="/profile/delete-student/<%=data[i]._id%>" style="width: 85px;" type="button">Reject</a>
                     
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"></h4>
-                          </div>
-                          <div class="modal-body">
-                            <p>Need a whiteboard cleaner.</p>
-                          </div>
-                          <div class="modal-footer">
-                            <button class="btn btn-info" type="button">Reply</button>        </div>
-                        </div>
-                      </div>
-                    </div>
+                      <%}%>
+                              
+                    </td>
+  
+                  </tr>
                   
-                </tr>
+                  <%}%> 
                 
                 
               </tbody>

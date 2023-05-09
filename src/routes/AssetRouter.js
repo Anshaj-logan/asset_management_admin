@@ -55,6 +55,7 @@ AssetRouter.get('/viewasset', async function(req,res){
             {
                 '$unwind' : '$category'
             },
+            { '$sort': { 'purchasedate': 1 } },
             {
                 '$group' :
                 {
@@ -100,7 +101,7 @@ AssetRouter.post('/save-asset',upload.fields([
 
     }
     assetmodel(data).save().then((data)=>{
-        console.log(data);
+        res.redirect('/asset/addasset')
     
         })
 })

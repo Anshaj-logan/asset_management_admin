@@ -6,9 +6,9 @@ const ComplaintAccept = require('../../models/ComplaintAcceptData');
 const StaffComplaint = require('../../models/StaffComplaintData');
 const StaffComplaintAccept = require('../../models/ComplaintAcceptStaffData');
 const mongoose = require('mongoose');
-
 var objectId = mongoose.Types.ObjectId
 const multer = require("multer");
+
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "../client/public/Complaint")
@@ -72,8 +72,6 @@ ComplaintRouter.get("/student-added-complaints/:id", async (req, res) => {
     }
 }
 );
-
-
 
 ComplaintRouter.get("/view-all-pending-complaints", async (req, res) => {
     try {

@@ -19,14 +19,4 @@ SuggestionRouter.post("/add-suggestion", async (req, res) => {
 );
 
 
-
-
-
-
-
-
-
-
-
-
 module.exports = SuggestionRouter
