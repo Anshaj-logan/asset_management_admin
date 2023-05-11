@@ -10,7 +10,7 @@ ImageRouter.get('/addimage',(req,res)=>{
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, '/public/images/Uploads')
+      cb(null, '../client/public/gallery')
     },
     filename: function (req, file, cb) {
       cb(null, file.originalname)
@@ -32,19 +32,47 @@ ImageRouter.get('/viewimage',async (req,res)=>{
 })
 
 
-
-ImageRouter.post('/save-image',function (req,res){
-    const data={
-        Image:req.body.imagename
+ImageRouter.post('/save-image', upload.array('images', 10), async (req, res) => {
+    try {
+      const files = req.files;
+      const images = [];
+  
+      for (let i = 0; i < files.length; i++) {
+        const image = new gallerymodel({
+          Image: files[i].originalname,
+        //   path: files[i].path
+        });
+  
+        images.push(await image.save());
+      }
+  
+      res.redirect('/image/viewimage');
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(500);
     }
+  });
 
-    
-    gallerymodel(data).save().then((data)=>{
-        console.log(data);
-    
-        })
 
+  ImageRouter.get('/delete/:id', function (req, res) {
+    const id = req.params.id
+    gallerymodel.deleteOne({_id:id}).then((data) => {
+        res.redirect('/image/viewimage');
     })
+})
+
+// ImageRouter.post('/save-image',function (req,res){
+//     const data={
+//         Image:req.body.imagename
+//     }
+
+    
+//     gallerymodel(data).save().then((data)=>{
+//         console.log(data);
+    
+//         })
+
+//     })
 
 
 

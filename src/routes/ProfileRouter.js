@@ -3,10 +3,35 @@ const workerregistermodel = require('../models/Registerworker')
 const login = require('../models/Login')
 const staff = require('../models/Register')
 const student = require('../models/Registerstdnt')
+const loginData = require('../models/Login')
 const ProfileRouter = express.Router()
-
+const bcrypt = require('bcryptjs')
 ProfileRouter.use(express.static('./public'))
 
+
+ProfileRouter.post("/admin-login", async (req, res) => {
+  const { username, password } = req.body;
+  console.log(username);
+
+  try {
+    const oldUser = await loginData.findOne({ username })
+    console.log(oldUser);
+    if (!oldUser) return res.redirect('/')
+    const isPasswordCorrect = await bcrypt.compare(password, oldUser.password)
+    console.log("user", isPasswordCorrect);
+
+    if (!isPasswordCorrect) return res.redirect('/')
+
+    if (oldUser.role === '0') {
+            const admin = await loginData.findOne({ _id: oldUser._id })
+            if (admin) {
+                return res.redirect('/dashboard')
+            }           
+    }       
+  } catch (error) {
+      return res.status(500).redirect('/')
+  }
+})
 
 ProfileRouter.get('/viewstudentprofile',async(req,res)=>{
   
@@ -121,7 +146,6 @@ try {
 }
     
 })
-
 
 
 ProfileRouter.get("/approve-worker/:id", async (req, res) => {

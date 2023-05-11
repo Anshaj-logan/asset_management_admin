@@ -8,6 +8,7 @@ const studentReg = require('../../models/Registerstdnt')
 const workerReg = require('../../models/Registerworker')
 
 
+
 const registerRouter = express.Router()
 
 registerRouter.post('/staff', async (req,res) => {

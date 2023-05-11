@@ -64,7 +64,49 @@ app.use('/api/allocation/',allocationRouter)
 
 
 
+app.get('/viewreport', async function(req,res){
+  try {
+      const  data = await assetmodel.aggregate([
+          {
+            '$lookup': {
+              'from': 'category_tbs', 
+              'localField': 'category_id', 
+              'foreignField': '_id', 
+              'as': 'category'
+            }
+          },
+          {
+              '$unwind' : '$category'
+          },
+          {
+              '$group' :
+              {
+                  '_id': '$_id',
+                  'assetname':{'$first':'$assetname'} ,
+                  'purchasedate':{'$first':'$purchasedate'} ,
+                  'Receipt':{'$first':'$Receipt'} ,
+                  'totalquantity':{'$first':'$totalquantity'} ,
+                  'cost':{'$first':'$cost'} ,
+                  'image':{'$first':'$image'} ,
 
+                  'categoryname':{'$first':'$category.categoryname'} ,
+              }
+          }
+
+
+
+        ])
+        const totalCost = data.reduce((sum, obj) => sum + parseInt(obj.cost), 0);
+console.log(totalCost);
+
+// res.json({data:data})
+      res.render('ViewReport',{data,totalCost})
+      
+  } catch (error) {
+      console.log('categoryname');
+  }
+  
+})
 
 
 app.get('/viewasset', async function(req,res){
@@ -102,8 +144,8 @@ app.get('/viewasset', async function(req,res){
 
         const data = data1.map(item => {
           return {
-            image:`${__dirname}/../client/public/Asset/${item.image}`,
-            Receipt:`${__dirname}/../client/public/Asset/${item.Receipt}`,
+            image:item.image,
+            Receipt:item.Receipt,
             _id:item._id,
             assetname:item.assetname,
             purchasedate:item.purchasedate,
@@ -126,7 +168,7 @@ app.get('/viewasset', async function(req,res){
 
 app.get('/viewotherallocation', async function(req,res){
   try {
-      const data = await allocationothermodel.aggregate(
+      const data = await allocationmodelother.aggregate(
           [
               {
                   '$lookup': {
@@ -226,6 +268,10 @@ Allocation.get('/viewallocationother', async function(req,res){
 
 
 app.get('/',  (req, res) =>{
+  res.render('login')
+})
+
+app.get('/dashboard',  (req, res) =>{
   res.render('dashboard')
 })
 
@@ -238,7 +284,7 @@ const port=2000;
 
 mongoose.connect(MONGODB_URL).then(()=>{
     app.listen(port,()=>{
-        console.log(`server running on port http://localhost:2000/admin`);
+        console.log(`server running on port http://localhost:2000/`);
     })
 }).catch((error)=>{
     console.log(` ${error} did not connect`); 

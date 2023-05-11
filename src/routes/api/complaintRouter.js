@@ -8,6 +8,7 @@ const StaffComplaintAccept = require('../../models/ComplaintAcceptStaffData');
 const mongoose = require('mongoose');
 var objectId = mongoose.Types.ObjectId
 const multer = require("multer");
+const gallery = require('../../models/Gallerytbl')
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -19,6 +20,21 @@ var storage = multer.diskStorage({
 })
 
 var upload = multer({ storage: storage })
+
+ComplaintRouter.get("/view-image", async (req, res) => {
+    try {
+        const allData = await gallery.find()
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+    }
+});
 
 ComplaintRouter.post('/upload-image', upload.single("file"), (req, res) => {
     console.log("jh",req.file.filename);
@@ -128,6 +144,54 @@ ComplaintRouter.get("/view-all-pending-complaints-staff", async (req, res) => {
             },
             {
                 "$unwind":"$staff"
+            },
+            {
+                "$group":{
+                    "_id":"$_id",
+                    "department":{"$first":"$department"},
+                    "class":{"$first":"$class"},
+                    "complaint":{"$first":"$complaint"},
+                    "room_number":{"$first":"$room_number"},
+                    "complaint_id":{"$first":"$_id"},
+                    "name":{"$first":"$staff.name"},
+                    "image":{"$first":"$image"},
+                    "status":{"$first":"$status"},
+                }
+            }
+            
+          ])
+        if (allData) {
+            return res.status(200).json({ success: true, error: false, data: allData });
+        }
+        else {
+            res.status(201).json({ success: false, error: true, message: "No data found" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error: true, message: "Something went wrong" });
+    }
+});
+
+ComplaintRouter.get("/view-all-pending-complaints-staff/:id", async (req, res) => {
+    try {
+        const id = req.params.id
+        console.log(id);
+        const allData = await StaffComplaint.aggregate([
+            {
+              '$lookup': {
+                'from': 'registerstaff_tbs', 
+                'localField': 'staff_id', 
+                'foreignField': '_id', 
+                'as': 'staff'
+              }
+            },
+            {
+                "$unwind":"$staff"
+            },
+            {
+               '$match':{
+                'staff_id':new objectId(id)
+               } 
             },
             {
                 "$group":{

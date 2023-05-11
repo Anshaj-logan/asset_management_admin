@@ -9,7 +9,7 @@ const allocationclsSchema = new schema({
     Class:{type:String},
     Roomnumber:{type:String},
     allottedquantity:{type:String},
-    // image:{type:String}
+    image:{type:String}
 })
 
 const allocationclsmodel = mongoose.model('allocationcls_tb',allocationclsSchema)

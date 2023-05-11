@@ -2,10 +2,23 @@ const express = require('express')
 const allocationclsmodel = require('../models/Allocationtblcls')
 const assetmodel = require('../models/Assettbl')
 const allocationmodelother = require('../models/Allocationtblothers')
+const multer = require('multer')
 //const categorymodel = require('../models/Categorytbl')
 const Allocation = express.Router()
 Allocation.use(express.static('./public'))
 
+
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "../client/public/Asset")
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+
+var upload = multer({ storage: storage })
 
 Allocation.get('/addallocationclass',async function(req,res){
     try {
@@ -108,13 +121,14 @@ Allocation.get('/viewallocation', async function(req,res){
 
 
 
-Allocation.post('/allocationcls',function (req,res){
+Allocation.post('/allocationcls',upload.single('image'),function (req,res){
     const data={
         asset_id:req.body.asset_id,
         department:req.body.department_name,
         Class:req.body.Class_name,
         allottedquantity:req.body.quantity_name,
-        Roomnumber:req.body.room_name
+        Roomnumber:req.body.room_name,
+        image:req.file.filename
     }
     allocationclsmodel(data).save().then((data)=>{
         res.redirect('/viewallocation')
@@ -123,15 +137,16 @@ Allocation.post('/allocationcls',function (req,res){
     })
     
 
-    Allocation.post('/allocationothersname',function (req,res){
+    Allocation.post('/allocationothersname',upload.single('image'),function (req,res){
         const data={
             asset_id:req.body.asset_id,
             other:req.body.other,
             Roomnumber:req.body.Roomnumber,
             allottedquantity:req.body.quantity_name,
+            image:req.file.filename
         }
         allocationmodelother(data).save().then((data)=>{
-            res.redirect('/viewallocationother')
+            res.redirect('/viewotherallocation')
         
             })
         })

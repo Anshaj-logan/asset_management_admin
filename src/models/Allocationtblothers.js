@@ -8,6 +8,7 @@ const allocationotherSchema = new schema({
     other:{type:String},
     Roomnumber:{type:String},
     allottedquantity:{type:String},
+    image:{type:String},
 })
 
 

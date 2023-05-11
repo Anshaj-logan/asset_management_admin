@@ -240,10 +240,10 @@
 
                 <tr>
                   <td><%= i+1%></td>
-                  <td><img src="./images/Uploads/<%= data[i].Image%>" height="50px" width="50px"></td>
+                  <td><%= data[i].Image%></td>
                   <td>
-                    <button class="btn btn-primary" type="button">Edit</button>
-                    <button class="btn btn-danger" type="button">Delete</button>
+                    <!-- <button class="btn btn-primary" type="button">Edit</button> -->
+                    <a href="/image/delete/<%=data[i]._id%>" class="btn btn-danger" >Delete</a>
                   </td>
 
                 </tr>

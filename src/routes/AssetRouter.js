@@ -5,9 +5,18 @@ const AssetRouter=express.Router()
 AssetRouter.use(express.static('./public'))
 const multer = require("multer");
 var storage = multer.diskStorage({
+    // destination: function (req, file, cb) {
+    //     cb(null, "../client/public/Asset")
+    // },
     destination: function (req, file, cb) {
-        cb(null, "../client/public/Asset")
-    },
+        let destinationPath = '';
+        if (file.fieldname === 'image') {
+          destinationPath = '../client/public/Asset';
+        } else if (file.fieldname === 'receipt') {
+          destinationPath = './public/images';
+        }
+        cb(null, destinationPath);
+      },
     filename: function (req, file, cb) {
         cb(null, file.originalname)
     }
@@ -66,7 +75,7 @@ AssetRouter.get('/viewasset', async function(req,res){
                     'totalquantity':{'$first':'$totalquantity'} ,
                     'cost':{'$first':'$cost'} ,
                     'image':{'$first':'$image'} ,
-
+                    
                     'categoryname':{'$first':'$category.categoryname'} ,
                 }
             }
